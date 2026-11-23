@@ -1,91 +1,46 @@
-# Nome do Jogo
+# OVERRIDE: Treine a IA
 
-Projeto final da disciplina de Introdução a Algoritmos/Programação, desenvolvido com Python e Pygame.
+Projeto final de Introdução a Algoritmos (PUC Minas), feito com Python e Pygame, a partir do template da disciplina.
+Tema: **IA no Cotidiano: Aplicações e Uso Responsável**.
 
-Este repositório é um template para os grupos da disciplina. A proposta é começar com uma base funcional e evoluir o jogo ao longo do semestre.
+## Integrantes
+Lucca Marinho Eterovik Tavares Pereira, Guilherme Alves Cobalt Camara, Gabriel Oliveira Gonzaga Araújo, Maria Fernanda Ferreira Rangel
 
-## Integrantes do grupo
+## Descrição
+Você supervisiona uma linha de triagem automatizada. Peças com tamanho e cor (laranja a azul) descem numa esteira e a IA decide se aprova ou reprova. A IA começa sem saber nada e **aprende com as suas decisões** (aprendizado supervisionado). Quando aprende, decide sozinha. Quando o manual muda, ela erra até reaprender. Se você ensinar errado, ela aprende errado.
 
-- Nome do integrante 1
-- Nome do integrante 2
-- Nome do integrante 3
-- Nome do integrante 4
+## Uso responsável da IA no jogo
+- **Confiabilidade:** a IA erra e precisa ser conferida. Acertar com a IA em dúvida ("?") não dá bônus.
+- **Transparência:** o painel mostra o que a IA aprendeu, sua precisão e sua confiança.
+- **Qualidade dos dados:** ensinar errado piora a IA.
+- **Supervisão humana:** erros da IA custam qualidade da fábrica; a responsabilidade é da pessoa.
+- **Inclusão:** cores laranja/azul, seguras para daltonismo.
 
-## Estrutura do projeto
-
-- `main.py`: ponto de entrada da aplicação.
-- `src/`: código-fonte principal do jogo (loop, regras, sprites e dados).
-- `assets/`: imagens, fontes e sons.
-- `data/`: arquivos persistentes (recorde/ranking).
-- `tests/`: testes unitários com `pytest`.
-- `docs/`: documentação do projeto, incluindo proposta inicial.
-
-## Descrição do jogo
-
-Descreva brevemente a ideia principal do jogo.
-
-Exemplo:
-
-> O jogo consiste em controlar um personagem que deve coletar moedas e evitar obstáculos. O jogador ganha pontos ao coletar itens e perde vidas ao colidir com obstáculos. A partida termina quando o tempo acaba ou quando o jogador perde todas as vidas.
-
-## Objetivo do jogador
-
-Explique o que o jogador precisa fazer para vencer ou avançar no jogo.
-
-Exemplo:
-
-> O objetivo é coletar a maior quantidade possível de itens antes que o tempo acabe, evitando colisões com os obstáculos.
-
-## Regras do jogo
-
-Liste as principais regras do jogo.
-
-Exemplo:
-
-- O jogador se movimenta usando as setas do teclado.
-- Cada item coletado aumenta a pontuação.
-- Colidir com um obstáculo reduz a quantidade de vidas.
-- A partida termina quando o jogador perde todas as vidas ou quando o tempo acaba.
+## Como a IA funciona
+Classificador simples (regressão logística): `p = sigmoide(peso_tamanho*(tamanho-0.5) + peso_cor*(cor-0.5) + viés)`. A cada exemplo dado pelo jogador os pesos são ajustados proporcionalmente ao erro. Código em `src/funcoes.py` (`ia_decide`, `ia_treinar`).
 
 ## Controles
+- Seta direita (ou D): aprovar | Seta esquerda (ou A): reprovar
+- ENTER: iniciar/reiniciar | ESC: pausar
 
-Informe as teclas ou comandos utilizados no jogo.
+## Regras
+- Siga o MANUAL da fase. Acerto: +10 (+5 se a IA acertou sozinha e confiante). Erro: -1 de qualidade (começa com 5).
+- Cada fase tem 12 peças; depois o manual muda e a esteira acelera. A partida acaba com qualidade zero.
+- O recorde fica em `data/recorde.txt`.
 
-Exemplo:
-
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
-
-## Como executar o projeto
-
-### 1. Clonar o repositório
-
+## Como executar
 ```bash
-git clone LINK_DO_REPOSITORIO
-cd NOME_DA_PASTA
 pip install -r requirements.txt
 python main.py
-```
-
-## Como executar os testes
-
-```bash
 python -m pytest
 ```
 
-## Checklist mínimo para entrega
+## Estrutura do projeto
+- `main.py`: ponto de entrada
+- `src/config.py`: valores configuráveis | `src/funcoes.py`: regras e IA | `src/jogo.py`: estado, loop e telas | `src/sprites.py`: desenho das peças | `src/dados.py`: recorde
+- `tests/test_logica.py`: testes de lógica | `docs/proposta.MD`: proposta | `data/`: recorde | `assets/`: vazio (sem recursos externos)
 
-- Preencher este README com nome final, descrição real, regras e controles do jogo.
-- Atualizar `docs/proposta.MD` com a proposta do grupo.
-- Garantir que o jogo executa com `python main.py`.
-- Garantir que os testes passam com `pytest`.
-
-## Observações para os alunos
-
-- Mantenham o código organizado em módulos pequenos e com responsabilidade clara.
-- Comentem partes importantes da lógica, principalmente regras do jogo.
-- Registrem decisões técnicas no README do grupo ao longo do desenvolvimento.
+## Recursos externos e uso de IA
+- Nenhuma imagem, som, fonte ou código de terceiros: os gráficos são formas do Pygame e a fonte é a padrão do sistema.
+- Bibliotecas: Pygame (LGPL) e pytest (MIT).
+- O código foi desenvolvido com apoio de uma ferramenta de IA (Claude, da Anthropic) e revisado pelo grupo.

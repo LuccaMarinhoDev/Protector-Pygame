@@ -1,29 +1,29 @@
+# Desenhos feitos só com formas geométricas (sem imagens externas).
 import pygame
-            
-def pegar_sprite(local_arquivo, x, y, width, height, scale=1):
-    """Corta um único elemento de uma spritesheet BMP e remove o fundo."""
-    
-    # 1. Carrega o BMP e usa .convert() (sem alpha) para otimizar a velocidade
-    sheet = pygame.image.load(local_arquivo).convert()
 
-    # 2. Cria uma superfície padrão para o recorte (não precisa de SRCALPHA aqui)
-    image = pygame.Surface((width, height))
-    
-    # 3. Copia o pedaço da folha BMP para a nossa nova imagem
-    image.blit(sheet, (0, 0), (x, y, width, height))
-    
-    # 4. CONFIGURAÇÃO DA TRANSPARÊNCIA (O segredo para o BMP)
-    # Pegamos a cor do pixel no canto superior esquerdo (0,0) do recorte, 
-    # assumindo que o fundo do seu sprite começa ali.
-    cor_do_fundo = image.get_at((0, 0))
-    
-    # Dizemos ao Pygame para ignorar essa cor específica na hora de desenhar
-    image.set_colorkey(cor_do_fundo)
-    
-    # 5. Aplica o redimensionamento, se houver
-    if scale != 1:
-        novo_largura = int(width * scale)
-        novo_altura = int(height * scale)
-        image = pygame.transform.scale(image, (novo_largura, novo_altura))
-        
-    return image
+from src import config
+
+
+def cor_da_peca(cor):
+    """0 = laranja ... 1 = azul (par de cores seguro para daltonismo)."""
+    return int(240 * (1 - cor) + 40 * cor), int(150 * (1 - cor) + 130 * cor), int(30 * (1 - cor) + 240 * cor)
+
+
+def raio_da_peca(tamanho):
+    """Raio do círculo: peças maiores têm tamanho próximo de 1."""
+    return int(config.RAIO_BASE_PECA + config.RAIO_EXTRA_PECA * tamanho)
+
+
+def desenhar_peca(tela, peca, fonte, piscar):
+    """Desenha a peça; se a IA estiver em dúvida mostra um '?' piscando."""
+    x, y = int(peca["x"]), int(peca["y"])
+    raio = raio_da_peca(peca["tamanho"])
+    pygame.draw.circle(tela, cor_da_peca(peca["cor"]), (x, y), raio)
+    pygame.draw.circle(tela, config.BRANCO, (x, y), raio, 2)
+    if peca["estado"] == "esteira" and peca["confianca"] < config.CONFIANCA_BAIXA and piscar:
+        texto = fonte.render("?", True, config.AMARELO)
+        tela.blit(texto, texto.get_rect(center=(x, y)))
+    if peca["decidida_por"] == "jogador":
+        pygame.draw.circle(tela, config.CIANO, (x, y), raio + 5, 2)
+    elif peca["decidida_por"] == "ia":
+        pygame.draw.circle(tela, config.ROXO, (x, y), raio + 5, 2)

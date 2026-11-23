@@ -1,254 +1,104 @@
-# Proposta Inicial do Jogo
+# Proposta do Jogo
 
-Este documento deve ser preenchido pelo grupo na etapa inicial do projeto.
+## 1. Nome do jogo
+OVERRIDE: Treine a IA
 
-A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolvida com **Python e Pygame** dentro do prazo disponível. Consulte o enunciado publicado no Canvas para conhecer o eixo temático e as orientações vigentes.
-
-## 1. Nome provisório do jogo
-
-Informe o nome provisório do jogo.
-# Proposta Inicial do Jogo
-
-## Nome do jogo
-OVERRIDE
-
-## Integrantes do grupo
+## 2. Integrantes do grupo
 - Lucca Marinho Eterovik Tavares Pereira
 - Guilherme Alves Cobalt Camara
 - Gabriel Oliveira Gonzaga Araújo
 - Maria Fernanda Ferreira Rangel
 
-## Tema específico
-Inteligência artificial na segurança de ambientes inteligentes, com foco na utilização responsável de robôs autônomos para proteger informações e equipamentos.
+## 3. Tema específico
+**IA no Cotidiano: robótica e automação, com supervisão humana e uso responsável.**
 
-## Relevância do tema e uso responsável da IA
-A inteligência artificial pode auxiliar na proteção de ambientes e na identificação de ameaças. Entretanto, sistemas autônomos precisam respeitar regras de segurança para não prejudicar pessoas ou equipamentos autorizados. O jogo representa essa situação por meio de robôs que protegem um servidor e devem distinguir invasores de agentes autorizados antes de atacar.
+Muitas tarefas do dia a dia (triagem de produtos, filtros, recomendações) já são feitas por sistemas que aprendem com exemplos. O recorte do jogo é: *uma IA só é tão boa quanto os exemplos que recebe, e uma pessoa precisa supervisioná-la e conferir seus resultados.*
 
-## Tipo de jogo
-Jogo 2D de ação e sobrevivência, desenvolvido em Python com a biblioteca Pygame.
+## 4. Uso responsável da IA na jogabilidade (e não só no cenário)
+| Aspecto responsável | Como afeta uma regra do jogo |
+|---|---|
+| Confiabilidade e análise crítica | A IA erra, principalmente quando o manual muda. O jogador precisa conferir as decisões dela. Acertar "na sorte" com a IA em dúvida (peça com "?") não dá bônus. |
+| Transparência | O painel "Cérebro da IA" mostra o que ela aprendeu (pesos), a precisão recente e a confiança de cada peça. |
+| Viés / qualidade dos dados | Só as decisões do jogador treinam a IA. Se ele ensinar errado, ela aprende errado e passa a errar mais. |
+| Supervisão humana | Quanto mais a IA aprende, mais ela automatiza, mas qualquer erro dela custa qualidade da fábrica. A pessoa continua responsável. |
+| Inclusão | A cor das peças usa o par laranja/azul (seguro para daltonismo) e o tamanho também é uma característica. |
+| Privacidade/segurança | Não usa serviços externos nem dados pessoais: tudo roda localmente. |
 
-## Descrição geral
-O jogador controla um personagem responsável pela proteção de um servidor central. Inicialmente, ele possui dois robôs de defesa que o acompanham e atacam invasores automaticamente. Além dos invasores, agentes autorizados aparecem no cenário e podem acessar o servidor sem sofrer ataques.
+## 5. Tipo de jogo
+Jogo 2D de reflexo e estratégia (triagem em esteira com simulação básica de IA), em Python e Pygame.
 
-A partida é dividida em ondas de dificuldade crescente. Ao eliminar invasores, existe uma pequena chance de aparecerem melhorias no mapa. O jogador pode coletá-las para aumentar a velocidade, o alcance de ataque ou a quantidade de robôs da equipe.
+## 6. Descrição geral do jogo
+Peças com **tamanho** e **cor** (laranja a azul) descem numa esteira. Na linha de decisão a IA aprova ou reprova a peça sozinha. Antes disso o jogador pode decidir com as setas, seguindo o **manual** da fase. Cada decisão do jogador é um exemplo de treino: a IA ajusta seus pesos (classificador de regressão logística simples, sem bibliotecas externas). Quando o manual muda, a IA precisa reaprender.
 
-## Integração da inteligência artificial com a jogabilidade
-Os robôs de defesa tomam decisões automaticamente. Eles verificam a autorização dos agentes próximos, identificam invasores dentro de seu alcance e priorizam aqueles que representam maior ameaça ao servidor.
+## 7. Objetivo do jogador
+Ensinar a IA para automatizar a triagem, manter a qualidade da fábrica e superar o recorde.
 
-Os invasores também possuem um comportamento adaptativo simples: o jogo registra os lados do cenário pelos quais conseguiram alcançar o servidor e aumenta a frequência de invasões nesses locais nas próximas ondas.
+## 8. Regras principais
+- Cada fase tem um manual (grandes; azuis; grandes e azuis; pequenas) e 12 peças.
+- Decisão correta: +10 pontos (+5 de automação se a IA acertar sozinha e confiante). Decisão errada: -1 de qualidade (começa com 5).
+- Só as decisões do jogador treinam a IA, inclusive as erradas.
+- A cada fase o manual muda e a esteira acelera. Concluir a fase dá +25.
 
-A IA será simulada com funções, condicionais, listas e dicionários, sem necessidade de modelos de aprendizado de máquina ou serviços externos. A atuação dos robôs será limitada por regras de autorização, representando a importância da segurança e da supervisão humana em sistemas autônomos.
+## 9. Condição de vitória
+Não há vitória final. O objetivo é chegar à maior fase possível e bater o recorde.
 
-## Objetivo do jogador
-Proteger o servidor durante o maior tempo possível, eliminar invasores, coletar melhorias e superar o recorde de pontuação.
+## 10. Condição de derrota
+A qualidade chegar a zero. A tela final mostra pontuação, fase, recorde e quantos exemplos a IA aprendeu.
 
-## Regras principais
-- O jogador começa com dois robôs de defesa.
-- Os robôs acompanham o jogador e atacam invasores automaticamente dentro de seu alcance.
-- Agentes autorizados podem chegar ao servidor sem causar danos e não devem ser atacados.
-- Cada invasor que alcançar o servidor reduz sua integridade em um ponto.
-- O servidor começa com três pontos de integridade.
-- A eliminação de invasores aumenta a pontuação e pode gerar itens de melhoria.
-- As melhorias podem aumentar a velocidade do jogador, a velocidade dos robôs, o alcance de ataque ou adicionar um robô à equipe.
-- As melhorias duram até o final da partida e possuem limites para manter o equilíbrio.
-- A quantidade e a velocidade dos invasores aumentam progressivamente a cada onda.
+## 11. Elementos previstos no jogo
+- **Elemento principal:** o jogador (supervisor), que controla as decisões com o teclado.
+- **Desafios:** peças com características variadas, esteira que acelera, manual que muda a cada fase.
+- **Interação:** aprovar/reprovar peças, ensinar a IA, observar o painel dela.
+- **Indicadores:** pontos, qualidade, fase, recorde, precisão e automação da IA.
+- Telas inicial, de jogo, de pausa e de fim.
 
-## Condição de vitória
-Não existe uma vitória definitiva. O objetivo é sobreviver ao maior número possível de ondas e superar o recorde histórico.
-
-## Condição de derrota
-A partida termina quando o servidor perde todos os seus pontos de integridade. Ao final, serão exibidos a pontuação, a onda alcançada e o recorde histórico.
-
-## Elementos previstos
-- Personagem controlado pelo jogador.
-- Servidor central.
-- Robôs de defesa autônomos.
-- Invasores e agentes autorizados.
-- Itens de melhoria coletáveis.
-- Indicadores de pontuação, integridade do servidor e onda atual.
-- Tela inicial e tela de fim de jogo.
-
-## Controles previstos
-
+## 12. Controles
 | Tecla | Ação |
 |---|---|
-| Setas direcionais / WASD | Movimentar o personagem |
-| ENTER | Iniciar ou reiniciar a partida |
-| ESC | Pausar ou retomar a partida |
+| Seta direita (ou D) | Aprovar a peça |
+| Seta esquerda (ou A) | Reprovar a peça |
+| ENTER | Iniciar / reiniciar |
+| ESC | Pausar / retomar |
 
-Os ataques e a coleta de melhorias acontecem automaticamente.
+## 13. Organização do código
+- `main.py`: ponto de entrada.
+- `src/config.py`: constantes configuráveis (tela, cores, regras, IA).
+- `src/funcoes.py`: regras do manual, IA (decidir/treinar), estatísticas, pontuação, dificuldade.
+- `src/jogo.py`: estado, decisões, atualização, desenho e loop principal.
+- `src/sprites.py`: desenho das peças com formas geométricas.
+- `src/dados.py`: leitura e escrita do recorde.
+- `tests/test_logica.py`: testes. `docs/`: proposta. `data/recorde.txt`: recorde.
 
-## Organização inicial do código
-- `main.py`: inicialização, movimentação, atualização e exibição do jogo.
-- `logica.py`: decisões dos robôs, comportamento dos invasores, colisões e melhorias.
-- `arquivos.py`: leitura e escrita do recorde.
-- `tests/test_logica.py`: testes das principais funções.
-- `assets/`: imagens produzidas pelo grupo ou recursos devidamente creditados.
-- `docs/proposta.md`: proposta inicial do jogo.
-- `README.md`: descrição, controles e instruções de execução.
+## 14. Estruturas de dados
+- **Listas:** peças na esteira, histórico de acertos da IA, manuais de regras.
+- **Dicionários:** peça, IA (pesos), estado do jogo e manuais.
+- **Tuplas:** cores e posições.
+- **Variáveis:** pontuação, qualidade, fase, tempos.
 
-O código será organizado em funções simples, com nomes claros para as variáveis e valores de configuração fáceis de alterar.
+## 15. Uso de arquivos
+`data/recorde.txt` guarda o recorde. É carregado ao iniciar e salvo ao fim da partida. Se o arquivo não existir ou for inválido, o recorde é zero.
 
-## Estruturas de dados previstas
-- **Listas:** armazenar robôs, invasores, agentes autorizados e melhorias presentes no mapa.
-- **Dicionários:** armazenar atributos dos personagens e estatísticas das invasões.
-- **Tuplas:** representar coordenadas e cores.
-- **Variáveis:** controlar pontuação, integridade do servidor, tempo e onda atual.
+## 16. Recursos necessários
+Python 3, Pygame, `math` e `random` (biblioteca padrão), `pytest` para os testes. Sem imagens, sons ou fontes de terceiros: tudo é desenhado com formas geométricas e a fonte padrão do sistema.
 
-## Recursos necessários
-- Python 3.
-- Biblioteca Pygame.
-- Biblioteca random para geração de elementos aleatórios.
-- Biblioteca unittest para testes.
-- Formas geométricas para a primeira versão e imagens simples produzidas ou selecionadas pelo grupo para a versão final.
+## 17. Testes planejados
+- Regras do manual e mudança de manual por fase.
+- IA começa sem saber, aprende uma regra, reaprende quando a regra muda e aprende errado se for ensinada errado.
+- Pontuação (com e sem bônus de automação), perda de qualidade e derrota.
+- Avanço de fase, precisão da IA e salvamento/leitura do recorde.
 
-## Uso previsto de arquivos
-O recorde histórico será armazenado em um arquivo chamado `recorde.txt`. O programa carregará o recorde ao iniciar e atualizará o arquivo quando a pontuação anterior for superada. Caso o arquivo não exista, o recorde inicial será zero.
+## 18. Principais dificuldades esperadas
+- Fazer a IA aprender rápido o suficiente para o jogo ser divertido, sem ficar fácil demais.
+- Equilibrar a velocidade da esteira e a duração das fases.
+- Manter o código simples, em funções, e explicar a lógica da IA de forma clara.
 
-## Testes planejados
-- Verificar se o personagem respeita os limites do cenário.
-- Verificar se os robôs selecionam invasores e ignoram agentes autorizados.
-- Testar a adaptação das próximas ondas conforme o histórico das invasões.
-- Verificar a redução da integridade do servidor e a condição de derrota.
-- Testar a coleta e os efeitos das melhorias.
-- Verificar o cálculo da pontuação e o salvamento do recorde.
+## 19. Escopo mínimo para a entrega final
+Esteira funcional, decisão do jogador por teclado, IA que aprende com os exemplos, manual que muda por fase, pontuação e qualidade, painel da IA, telas inicial e final, recorde em arquivo, README e testes de lógica.
 
-## Principais dificuldades esperadas
-- Implementar a movimentação automática dos robôs.
-- Fazer com que os robôs selecionem corretamente seus alvos.
-- Equilibrar a dificuldade das ondas e a frequência das melhorias.
-- Organizar o código de maneira simples e compreensível.
+## 20. Melhorias possíveis
+- Novos tipos de característica (ex.: forma da peça) e peças "enganosas" para discutir viés.
+- Efeitos sonoros e animações.
+- Ranking com vários recordes.
 
-## Escopo mínimo para a entrega final
-- Uma arena funcional de ação e sobrevivência.
-- Movimentação do personagem pelo teclado.
-- Dois robôs iniciais com seleção automática de alvos.
-- Identificação de agentes autorizados e invasores.
-- Adaptação simples dos invasores ao histórico das ondas.
-- Sistema de ondas e melhorias coletáveis.
-- Integridade do servidor, pontuação e tela de fim de jogo.
-- Leitura e escrita do recorde em arquivo.
-- Código organizado em funções, documentação e testes de lógica.
-
-## Melhorias possíveis
-- Ataque automático simples do personagem principal.
-- Novos tipos de invasores com diferentes velocidades e resistências.
-- Melhorias de dano e velocidade de ataque dos robôs.
-- Efeitos sonoros e novos cenários.
-
-## Declaração de originalidade
-A proposta combina uma mecânica de sobrevivência com o controle indireto de agentes autônomos, melhorias coletáveis e adaptação dos invasores. O grupo se compromete a revisar e compreender o código desenvolvido, identificar o uso de ferramentas de inteligência artificial e indicar eventuais códigos reaproveitados ou recursos de terceiros conforme as orientações da disciplina.
-
-**Nome:**
-
-> Escreva aqui.
-
-## 2. Integrantes do grupo
-
-- Nome 1:
-- Nome 2:
-- Nome 3:
-- Nome 4:
-
-## 3. Tema escolhido
-
-Indique qual tema específico o grupo escolheu **dentro do eixo temático definido no enunciado**.
-
-**Tema:**
-
-> Escreva aqui.
-
-**Como esse tema se relaciona com o jogo?** Explique brevemente (2 a 4 linhas) como ele aparecerá nos objetivos, nas regras ou nos desafios, e não apenas nas imagens ou no cenário.
-
-> Escreva aqui.
-
-## 4. Tipo de jogo
-
-Indique o estilo do jogo. Exemplos: desviar de obstáculos, coleta de itens, labirinto, perguntas e respostas, memória, Pong, Snake, Breakout, corrida ou sobrevivência simples.
-
-**Tipo escolhido:**
-
-> Escreva aqui.
-
-## 5. Descrição geral do jogo
-
-Explique, em poucas linhas, como o jogo funcionará. O que aparece na tela? O que o jogador controla? O que ele precisa fazer e quais desafios encontrará?
-
-**Descrição:**
-
-> Escreva aqui.
-
-## 6. Objetivo do jogador
-
-Descreva o objetivo principal. Por exemplo: coletar itens, sobreviver por determinado tempo, chegar ao final de um percurso ou completar desafios.
-
-**Objetivo:**
-
-> Escreva aqui.
-
-## 7. Regras principais
-
-Liste até cinco regras que expliquem o funcionamento do jogo. Exemplos: o jogador começa com três vidas; acertos somam pontos; colisões retiram vidas.
-
-- Regra 1:
-- Regra 2:
-- Regra 3:
-- Regra 4:
-- Regra 5:
-
-## 8. Condição de vitória
-
-Explique como o jogador vence ou conclui a partida. Exemplos: alcançar uma pontuação, finalizar uma fase ou completar todas as tarefas.
-
-**Condição de vitória:**
-
-> Escreva aqui.
-
-## 9. Condição de derrota ou encerramento
-
-Explique quando a partida termina ou como o jogador perde. Exemplos: esgotar as vidas, acabar o tempo ou atingir o limite de erros.
-
-**Condição de derrota ou encerramento:**
-
-> Escreva aqui.
-
-## 10. Elementos previstos no jogo
-
-Descreva brevemente os elementos mais importantes, sem precisar detalhar a implementação.
-
-- **Personagem ou elemento principal:**
-- **Obstáculos ou desafios:**
-- **Itens ou objetos de interação (se houver):**
-- **Pontuação, vidas, tempo ou progresso:**
-
-## 11. Controles previstos
-
-Informe como o jogador vai interagir com o jogo (por exemplo, setas para movimentar, espaço para agir ou mouse para selecionar).
-
-**Controles:**
-
-> Escreva aqui.
-
-## 12. Principais dificuldades esperadas
-
-Cite até três dificuldades que o grupo espera enfrentar. Exemplos: movimentação, colisões, controle de tempo, testes ou uso do GitHub.
-
-- Dificuldade 1:
-- Dificuldade 2:
-- Dificuldade 3:
-
-## 13. Escopo mínimo para a entrega final
-
-Descreva a **versão mais simples que já seria jogável**, com as interações e regras essenciais. Evite planejar funcionalidades demais.
-
-**Escopo mínimo:**
-
-> Escreva aqui.
-
-## 14. Possíveis melhorias, caso haja tempo
-
-Liste até três funcionalidades extras para implementar somente depois que a versão mínima estiver funcionando. Exemplos: sons, fases, ranking, animações ou menu inicial.
-
-- Melhoria 1:
-- Melhoria 2:
-- Melhoria 3:
+## 21. Declaração de originalidade
+A proposta e a mecânica (supervisionar e treinar uma IA numa esteira) foram definidas pelo grupo para este trabalho e não reaproveitam jogos de semestres anteriores. O código foi desenvolvido com apoio de uma ferramenta de IA (Claude, da Anthropic). O grupo se compromete a revisar e compreender todo o código e a explicar as partes em que trabalhou. Nenhum código, imagem, som ou fonte de terceiros foi utilizado.
